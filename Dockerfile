@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV WORKSPACE_DIR /root
 ENV FIRMWARE_DIR ${WORKSPACE_DIR}/Firmware
@@ -10,40 +10,40 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && \
     apt-get install -y bc \
-                       cmake \
-                       curl \
-                       gazebo9 \
-                       git \
-                       gstreamer1.0-plugins-bad \
-                       gstreamer1.0-plugins-base \
-                       gstreamer1.0-plugins-good \
-                       gstreamer1.0-plugins-ugly \
-                       iproute2 \
-                       libeigen3-dev \
-                       libgazebo9-dev \
-                       libgstreamer-plugins-base1.0-dev \
-                       libgstrtspserver-1.0-dev \
-                       libopencv-dev \
-                       libroscpp-dev \
-                       protobuf-compiler \
-                       python3-jsonschema \
-                       python3-numpy \
-                       python3-pip \
-                       unzip \
-                       xvfb && \
+    cmake \
+    curl \
+    git \
+    gstreamer1.0-plugins-bad \
+    gstreamer1.0-plugins-base \
+    gstreamer1.0-plugins-good \
+    gstreamer1.0-plugins-ugly \
+    iproute2 \
+    libeigen3-dev \
+    libgstreamer-plugins-base1.0-dev \
+    libgstrtspserver-1.0-dev \
+    libopencv-dev \
+    libroscpp-dev \
+    protobuf-compiler \
+    python3-jsonschema \
+    python3-numpy \
+    python3-pip \
+    unzip \
+    xvfb && \
     apt-get -y autoremove && \
     apt-get clean autoclean && \
     rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
 RUN pip3 install --upgrade pip && \
     pip3 install empy \
-                 future \
-                 jinja2 \
-                 kconfiglib \
-                 packaging \
-                 pyros-genmsg \
-                 toml \
-                 pyyaml
+    future \
+    jinja2 \
+    kconfiglib \
+    packaging \
+    pyros-genmsg \
+    toml \
+    pyyaml
+
+RUN curl -sSL http://get.gazebosim.org | sh
 
 RUN git clone https://github.com/PX4/PX4-Autopilot.git ${FIRMWARE_DIR}
 RUN git -C ${FIRMWARE_DIR} checkout main
@@ -57,7 +57,7 @@ RUN ["/bin/bash", "-c", " \
     cd ${FIRMWARE_DIR} && \
     DONT_RUN=1 make px4_sitl gazebo && \
     DONT_RUN=1 make px4_sitl gazebo \
-"]
+    "]
 
 COPY sitl_rtsp_proxy ${SITL_RTSP_PROXY}
 RUN cmake -B${SITL_RTSP_PROXY}/build -H${SITL_RTSP_PROXY}
