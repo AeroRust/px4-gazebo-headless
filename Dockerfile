@@ -8,6 +8,9 @@ ENV DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
 ENV DISPLAY :99
 ENV LANG C.UTF-8
 
+# Tag or branch
+ENV CHECKOUT_PX4=v1.13.0
+
 RUN apt-get update && \
     apt-get install -y bc \
     cmake \
@@ -46,7 +49,7 @@ RUN pip3 install --upgrade pip && \
 RUN curl -sSL http://get.gazebosim.org | sh
 
 RUN git clone https://github.com/PX4/PX4-Autopilot.git ${FIRMWARE_DIR}
-RUN git -C ${FIRMWARE_DIR} checkout main
+RUN git -C ${FIRMWARE_DIR} checkout ${CHECKOUT_PX4}
 RUN git -C ${FIRMWARE_DIR} submodule update --init --recursive
 
 COPY edit_rcS.bash ${WORKSPACE_DIR}
